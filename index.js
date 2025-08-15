@@ -36,7 +36,7 @@ const commands = [
         .addBooleanOption(option =>
             option.setName('منشن_الاعضاء')
                 .setDescription('هل تريد منشن الأعضاء الذين سيتم إرسال الرسالة إليهم؟')
-                .setRequired(false))
+                .setRequired(true))
 ];
 
 client.once('ready', async () => {
@@ -86,7 +86,7 @@ client.on('interactionCreate', async interaction => {
         const message = interaction.options.getString('الرسالة');
         const includeBots = interaction.options.getBoolean('تضمين_البوتات') || false;
         const specificRole = interaction.options.getRole('رتبة_محددة');
-        const mentionMembers = interaction.options.getBoolean('منشن_الاعضاء') || false;
+        const mentionMembers = interaction.options.getBoolean('منشن_الاعضاء');
 
         await interaction.deferReply({ ephemeral: true });
 
@@ -121,10 +121,9 @@ client.on('interactionCreate', async interaction => {
                 const mentions = selectedMembers.map(member => `<@${member.id}>`).join(' ');
                 const mentionMessage = `📢 **إشعار للأعضاء المحددين:**\n${mentions}\n\n📬 **الرسالة:** ${message}`;
                 
-                // إرسال المنشن في نفس القناة
-                await interaction.followUp({
-                    content: mentionMessage,
-                    ephemeral: false
+                // إرسال المنشن في القناة الحالية
+                await interaction.channel.send({
+                    content: mentionMessage
                 });
             }
 
@@ -213,4 +212,4 @@ server.listen(PORT, '0.0.0.0', () => {
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
-                          
+                
