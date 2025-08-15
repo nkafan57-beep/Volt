@@ -20,8 +20,7 @@ const commands = [
             option.setName('العدد')
                 .setDescription('عدد الأعضاء المراد إرسال الرسالة لهم')
                 .setRequired(true)
-                .setMinValue(1)
-                .setMaxValue(100))
+                .setMinValue(1))
         .addStringOption(option =>
             option.setName('الرسالة')
                 .setDescription('الرسالة المراد إرسالها')
@@ -193,4 +192,4 @@ server.listen(PORT, '0.0.0.0', () => {
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
-      
+                
