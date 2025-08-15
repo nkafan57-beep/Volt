@@ -116,17 +116,6 @@ client.on('interactionCreate', async interaction => {
                 });
             }
 
-            // إرسال منشن في القناة إذا تم اختيار ذلك
-            if (mentionMembers) {
-                const mentions = selectedMembers.map(member => `<@${member.id}>`).join(' ');
-                const mentionMessage = `📢 **إشعار للأعضاء المحددين:**\n${mentions}\n\n📬 **الرسالة:** ${message}`;
-                
-                // إرسال المنشن في القناة الحالية
-                await interaction.channel.send({
-                    content: mentionMessage
-                });
-            }
-
             // إرسال الرسائل الخاصة
             let successCount = 0;
             let failCount = 0;
@@ -134,7 +123,15 @@ client.on('interactionCreate', async interaction => {
 
             for (const member of selectedMembers) {
                 try {
-                    await member.send(message);
+                    // تحديد الرسالة بناءً على خيار المنشن
+                    let messageToSend;
+                    if (mentionMembers) {
+                        messageToSend = `<@${member.id}> ${message}`;
+                    } else {
+                        messageToSend = message;
+                    }
+                    
+                    await member.send(messageToSend);
                     successCount++;
                     
                     // تأخير صغير لتجنب rate limiting
@@ -212,4 +209,4 @@ server.listen(PORT, '0.0.0.0', () => {
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
-                
+                 
